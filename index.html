@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabyce — Rénovation de parquets anciens · Lyon</title>
+<meta name="description" content="Gabyce — Rénovation de parquets anciens à Lyon. Ponçage, réparation, pose en point de Hongrie et chevron, finitions et aménagement intérieur pour les appartements de caractère.">
+<meta name="author" content="Gabyce">
+
+<!-- ===== GOOGLE FONTS ===== -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500&family=Caveat:wght@500;600&display=swap');
+
+/* ===== TOKENS / VARIABLES ===== */
+:root{
+  --daylight: #FAF7F2;   /* fond principal — blanc lumineux haussmannien */
+  --oak-aged: #8B5A3C;   /* accent signature — brun parquet ancien chaud */
+  --ink:      #211D1A;   /* texte principal — encre presque noire, chaude */
+  --plaster:  #F0EAE0;   /* sections alternées — plâtre ancien */
+  --stone:    #8C8378;   /* texte secondaire — pierre grise tiède */
+  --gold-dust:#C9A876;   /* hover states, fines touches — poussière dorée */
+
+  /* Motif chevron parquet — point de Hongrie en SVG inline */
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M0,40 L40,0 L80,40 L40,80 Z' fill='none' stroke='%238B5A3C' stroke-width='1.5'/%3E%3C/svg%3E");
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  background:var(--daylight);
+  color:var(--ink);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ===== HELPERS ===== */
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 28px}
+.eyebrow{
+  font-family:'Jost',sans-serif;font-weight:400;font-size:11px;
+  text-transform:uppercase;letter-spacing:0.25em;color:var(--oak-aged);
+  margin-bottom:22px;
+}
+.section{padding:120px 0}
+.section-head{max-width:640px;margin-bottom:64px}
+.section-title{
+  font-family:'Italiana',serif;font-weight:400;color:var(--ink);
+  font-size:clamp(32px,4.5vw,52px);line-height:1.1;margin-bottom:20px;
+}
+.section-sub{font-weight:300;color:var(--stone);font-size:17px;max-width:520px}
+
+.chevron-bg{
+  position:relative;
+}
+.chevron-bg::before{
+  content:"";position:absolute;inset:0;
+  background-image:var(--chevron);
+  background-repeat:repeat;background-size:80px 80px;
+  opacity:0.05;pointer-events:none;z-index:0;
+}
+.chevron-bg > *{position:relative;z-index:1}
+
+/* ===== REVEAL ===== */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.revealed{opacity:1;transform:translateY(0)}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Jost',sans-serif;font-weight:500;font-size:13px;
+  text-transform:uppercase;letter-spacing:0.06em;border-radius:2px;
+  padding:14px 32px;transition:all .3s ease;cursor:pointer;
+}
+.btn-solid{background:var(--oak-aged);color:var(--daylight)}
+.btn-solid:hover{background:var(--ink)}
+.btn-ghost{background:transparent;border:1px solid var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--daylight)}
+
+/* ===== HEADER ===== */
+.header{
+  position:fixed;top:0;left:0;width:100%;z-index:100;
+  transition:background .4s ease,backdrop-filter .4s ease,box-shadow .4s ease;
+}
+.header.scrolled{
+  background:rgba(250,247,242,0.95);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 1px 0 rgba(33,29,26,0.06);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:74px}
+.logo{font-family:'Italiana',serif;font-size:24px;letter-spacing:0.03em;color:var(--ink);transition:color .3s ease}
+.header:not(.scrolled) .logo{color:var(--ink)}
+.nav{display:flex;align-items:center;gap:36px}
+.nav-links{display:flex;gap:32px}
+.nav-links a{
+  font-family:'Jost',sans-serif;font-weight:400;font-size:13px;
+  text-transform:uppercase;letter-spacing:0.15em;color:var(--stone);
+  transition:color .3s ease;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--oak-aged)}
+.header-cta{
+  font-family:'Jost',sans-serif;font-weight:400;font-size:13px;
+  border:1px solid var(--oak-aged);color:var(--oak-aged);
+  padding:9px 22px;border-radius:2px;transition:all .3s ease;
+}
+.header-cta:hover{background:var(--oak-aged);color:var(--daylight)}
+
+.burger{display:none;flex-direction:column;gap:5px;width:28px;padding:4px;z-index:120}
+.burger span{display:block;height:1.5px;width:100%;background:var(--ink);transition:transform .35s var(--ease),opacity .3s ease}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ===== MOBILE OVERLAY ===== */
+.mobile-nav{
+  position:fixed;inset:0;background:var(--daylight);z-index:110;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+  opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s var(--ease);
+}
+.mobile-nav.open{opacity:1;visibility:visible}
+.mobile-nav a{
+  font-family:'Italiana',serif;font-size:30px;color:var(--ink);
+  opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s ease;
+}
+.mobile-nav.open a{opacity:1;transform:translateY(0)}
+.mobile-nav a:hover{color:var(--oak-aged)}
+.mobile-nav a:nth-child(1){transition-delay:.1s}
+.mobile-nav a:nth-child(2){transition-delay:.18s}
+.mobile-nav a:nth-child(3){transition-delay:.26s}
+.mobile-nav a:nth-child(4){transition-delay:.34s}
+.mobile-nav a:nth-child(5){transition-delay:.42s}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  padding:140px 0 90px;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:45%;
+  background-image:var(--chevron);background-repeat:repeat;background-size:80px 80px;
+  opacity:0.04;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top,#000,transparent);
+  mask-image:linear-gradient(to top,#000,transparent);
+}
+.hero-inner{position:relative;z-index:2;max-width:780px}
+.hero h1{
+  font-family:'Italiana',serif;font-weight:400;line-height:1.05;margin:26px 0 30px;
+}
+.hero h1 .l1{display:block;font-size:clamp(34px,5vw,60px);color:var(--ink)}
+.hero h1 .l2{display:block;font-size:clamp(48px,7vw,88px);color:var(--oak-aged)}
+.hero-sub{font-weight:300;color:var(--stone);font-size:18px;max-width:460px;margin-bottom:28px}
+.hero-quote{
+  font-family:'Caveat',cursive;font-weight:600;font-size:22px;color:var(--oak-aged);
+  margin-bottom:38px;
+}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:16px}
+
+/* ===== SAVOIR-FAIRE ===== */
+.expertise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.expertise-col{padding-top:22px;border-top:1px solid rgba(139,90,60,0.2)}
+.expertise-num{font-family:'Italiana',serif;font-size:14px;color:var(--gold-dust);letter-spacing:0.1em}
+.expertise-icon{margin:18px 0 16px}
+.expertise-icon svg{width:34px;height:34px;stroke:var(--oak-aged);fill:none;stroke-width:1.5}
+.expertise-col h3{font-family:'Italiana',serif;font-weight:400;font-size:22px;color:var(--ink);margin-bottom:14px}
+.expertise-col p{font-weight:300;color:var(--stone);font-size:14px;line-height:1.8}
+
+/* ===== PROCESSUS ===== */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.process-step{padding:0 32px;border-left:1px solid rgba(139,90,60,0.25)}
+.process-step:first-child{padding-left:0;border-left:none}
+.process-step .num{font-family:'Italiana',serif;font-size:40px;color:var(--oak-aged);line-height:1;margin-bottom:18px;display:block}
+.process-step h3{font-family:'Italiana',serif;font-weight:400;font-size:22px;color:var(--ink);margin-bottom:12px}
+.process-step p{font-weight:300;color:var(--stone);font-size:14px;line-height:1.75}
+
+/* ===== RÉALISATIONS ===== */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.gallery-item{
+  position:relative;aspect-ratio:4/3;background:var(--daylight);
+  overflow:hidden;border-radius:2px;cursor:pointer;
+}
+.gallery-item::before{
+  content:"";position:absolute;inset:0;
+  background-image:var(--chevron);background-repeat:repeat;background-size:80px 80px;opacity:0.06;
+}
+.gallery-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Italiana',serif;font-size:110px;color:var(--oak-aged);opacity:0.15;
+}
+.gallery-label{
+  position:absolute;left:0;bottom:0;width:100%;padding:20px;z-index:2;
+  font-family:'Jost',sans-serif;font-weight:400;font-size:13px;color:var(--stone);
+  background:linear-gradient(to top,rgba(250,247,242,0.9),transparent);
+}
+.gallery-overlay{
+  position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  background:rgba(33,29,26,0.6);opacity:0;transition:opacity .45s var(--ease);
+  font-family:'Italiana',serif;font-size:20px;color:var(--daylight);letter-spacing:0.04em;
+}
+.gallery-item:hover .gallery-overlay{opacity:1}
+.gallery-cta{margin-top:48px;text-align:center}
+.gallery-cta a{font-family:'Jost',sans-serif;font-weight:500;color:var(--oak-aged);font-size:16px;display:inline-flex;align-items:center;gap:8px;transition:gap .3s ease}
+.gallery-cta a:hover{gap:14px;color:var(--gold-dust)}
+
+/* ===== À PROPOS ===== */
+.about-grid{display:grid;grid-template-columns:55fr 45fr;gap:64px;align-items:center}
+.about-text p{font-weight:300;color:var(--stone);line-height:1.9;font-size:16px;margin-bottom:20px}
+.about-quote{
+  background:var(--plaster);border:1px solid rgba(139,90,60,0.2);border-radius:2px;
+  padding:48px 40px;text-align:center;
+}
+.about-quote .q{font-family:'Caveat',cursive;font-weight:600;font-size:28px;color:var(--oak-aged);line-height:1.3;margin-bottom:18px}
+.about-quote .src{font-family:'Jost',sans-serif;font-weight:400;font-size:12px;color:var(--stone);text-transform:uppercase;letter-spacing:0.12em}
+
+/* ===== TÉMOIGNAGES ===== */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.testi-item{padding:0 36px;border-left:1px solid rgba(140,131,120,0.2)}
+.testi-item:first-child{padding-left:0;border-left:none}
+.testi-item p{font-weight:300;font-style:italic;color:var(--ink);font-size:16px;line-height:1.7;margin-bottom:22px;opacity:0.85}
+.testi-item .who{font-family:'Jost',sans-serif;font-weight:500;font-size:12px;color:var(--stone);text-transform:uppercase;letter-spacing:0.1em}
+
+/* ===== CONTACT ===== */
+.contact{background:var(--ink);color:var(--daylight)}
+.contact .eyebrow{color:var(--gold-dust)}
+.contact .section-title{color:var(--daylight)}
+.contact-sub{font-weight:300;color:rgba(250,247,242,0.7);font-size:17px;margin-bottom:60px}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:72px}
+.contact-channel{margin-bottom:36px}
+.contact-channel .lbl{font-family:'Jost',sans-serif;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold-dust);display:block;margin-bottom:8px}
+.contact-channel .val{font-family:'Italiana',serif;font-size:20px;color:var(--daylight);transition:color .3s ease}
+a.contact-channel-link:hover .val{color:var(--gold-dust)}
+
+.contact-form{display:grid;gap:26px}
+.field{display:flex;flex-direction:column}
+.field label{font-family:'Jost',sans-serif;font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold-dust);margin-bottom:8px}
+.field input,.field select,.field textarea{
+  font-family:'Jost',sans-serif;font-weight:300;font-size:15px;color:var(--daylight);
+  background:transparent;border:none;border-bottom:1px solid rgba(250,247,242,0.25);
+  border-radius:0;padding:12px 0;transition:border-color .3s ease;
+}
+.field textarea{resize:vertical;min-height:90px}
+.field input::placeholder,.field textarea::placeholder{color:rgba(250,247,242,0.4)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--gold-dust)}
+.field select{appearance:none;cursor:pointer}
+.field select option{color:var(--ink)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.contact-form .btn{width:100%;margin-top:6px;letter-spacing:0.08em}
+
+/* ===== FOOTER ===== */
+.footer{background:var(--daylight);border-top:1px solid rgba(139,90,60,0.2);padding:60px 0 40px;text-align:center}
+.footer-logo{font-family:'Italiana',serif;font-size:22px;color:var(--ink);margin-bottom:12px}
+.footer-tag{font-family:'Caveat',cursive;font-weight:600;font-size:18px;color:var(--oak-aged);margin-bottom:28px}
+.footer-nav{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:18px}
+.footer-nav a{font-family:'Jost',sans-serif;font-size:13px;color:var(--stone);text-transform:uppercase;letter-spacing:0.1em;transition:color .3s ease}
+.footer-nav a:hover{color:var(--oak-aged)}
+.footer-insta{font-family:'Jost',sans-serif;font-size:14px;color:var(--oak-aged);margin-bottom:28px;display:inline-block}
+.footer-insta:hover{color:var(--gold-dust)}
+.footer-rule{height:1px;background:rgba(140,131,120,0.15);max-width:420px;margin:0 auto 24px}
+.footer-copy{font-family:'Jost',sans-serif;font-size:13px;color:var(--stone);margin-bottom:6px}
+.footer-credit{font-family:'Jost',sans-serif;font-size:11px;color:var(--stone);opacity:0.7}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .expertise-grid{grid-template-columns:repeat(2,1fr);gap:44px}
+  .process-grid{grid-template-columns:repeat(2,1fr);gap:40px}
+  .process-step{padding:0 0 0 28px}
+  .process-step:nth-child(odd){padding-left:0;border-left:none}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr;gap:44px}
+  .contact-grid{grid-template-columns:1fr;gap:48px}
+}
+@media(max-width:768px){
+  .section{padding:88px 0}
+  .nav-links,.header-cta{display:none}
+  .burger{display:flex}
+  .testi-grid{grid-template-columns:1fr;gap:40px}
+  .testi-item{padding:0;border-left:none;border-top:1px solid rgba(140,131,120,0.2);padding-top:28px}
+  .testi-item:first-child{border-top:none;padding-top:0}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .container{padding:0 20px}
+  .expertise-grid{grid-template-columns:1fr;gap:36px}
+  .process-grid{grid-template-columns:1fr;gap:32px}
+  .process-step{padding:0;border-left:none;border-top:1px solid rgba(139,90,60,0.25);padding-top:24px}
+  .process-step:first-child{border-top:none;padding-top:0}
+  .gallery-grid{grid-template-columns:1fr}
+  .gallery-num{font-size:88px}
+  .hero-ctas .btn{width:100%}
+}
+
+/* ===== REDUCED MOTION ===== */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#hero" class="logo" aria-label="Gabyce — accueil">Gabyce</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <ul class="nav-links">
+        <li><a href="#savoir-faire">Savoir-faire</a></li>
+        <li><a href="#realisations">Réalisations</a></li>
+        <li><a href="#apropos">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="header-cta" aria-label="Discutons de votre projet">Discutons de votre projet</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== MOBILE NAV ===== -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#savoir-faire">Savoir-faire</a>
+  <a href="#realisations">Réalisations</a>
+  <a href="#apropos">À propos</a>
+  <a href="#contact">Contact</a>
+  <a href="#contact">Discutons de votre projet</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="container hero-inner">
+    <p class="eyebrow reveal">Rénovation de parquets anciens · Lyon</p>
+    <h1 class="reveal">
+      <span class="l1">Redonner vie</span>
+      <span class="l2">au parquet ancien.</span>
+    </h1>
+    <p class="hero-sub reveal">Ponçage, réparation, pose en point de Hongrie et chevron. Le savoir-faire au service des appartements de caractère, à Lyon.</p>
+    <p class="hero-quote reveal">✨ La beauté sauvera le monde.</p>
+    <div class="hero-ctas reveal">
+      <a href="#realisations" class="btn btn-solid" aria-label="Voir nos réalisations">Voir nos réalisations</a>
+      <a href="#contact" class="btn btn-ghost" aria-label="Nous contacter">Nous contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SAVOIR-FAIRE ===== -->
+<section class="section chevron-bg" id="savoir-faire" style="background:var(--plaster)">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Notre savoir-faire</p>
+      <h2 class="section-title">L'art de révéler le bois.</h2>
+      <p class="section-sub">Chaque parquet ancien a une histoire. Notre travail est de la révéler, pas de l'effacer.</p>
+    </div>
+    <div class="expertise-grid">
+      <div class="expertise-col reveal">
+        <span class="expertise-num">I</span>
+        <div class="expertise-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M3 21h18"/></svg>
+        </div>
+        <h3>Ponçage &amp; Restauration</h3>
+        <p>Remise à nu du bois ancien, réparation des lames abîmées, traitement des assemblages fatigués. Le geste précis qui révèle le veinage d'origine.</p>
+      </div>
+      <div class="expertise-col reveal">
+        <span class="expertise-num">II</span>
+        <div class="expertise-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 12l5-5 4 4 4-4 5 5"/><path d="M3 18l5-5 4 4 4-4 5 5"/></svg>
+        </div>
+        <h3>Point de Hongrie &amp; Chevron</h3>
+        <p>Pose traditionnelle dans les règles de l'art. Chaque lame ajustée à 45°, pour ces motifs intemporels qui font la signature des appartements anciens.</p>
+      </div>
+      <div class="expertise-col reveal">
+        <span class="expertise-num">III</span>
+        <div class="expertise-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8c0 3 3 4 7 4s7-1 7-4"/><path d="M5 8c0-3 3-4 7-4s7 1 7 4"/></svg>
+        </div>
+        <h3>Finitions &amp; Protection</h3>
+        <p>Vitrification, huilage ou cirage selon l'usage et l'esthétique recherchée. Une finition qui protège sans dénaturer la patine du bois.</p>
+      </div>
+      <div class="expertise-col reveal">
+        <span class="expertise-num">IV</span>
+        <div class="expertise-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 20V9l8-5 8 5v11"/><path d="M4 20h16"/><path d="M9 20v-6h6v6"/></svg>
+        </div>
+        <h3>Aménagement Intérieur</h3>
+        <p>Au-delà du parquet — cuisine, menuiserie, agencement sur mesure pour des intérieurs cohérents du sol au plafond.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESSUS ===== -->
+<section class="section" id="processus">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow" style="color:var(--stone)">Notre méthode</p>
+      <h2 class="section-title">Du diagnostic à la révélation.</h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <span class="num">1</span>
+        <h3>La visite</h3>
+        <p>Diagnostic sur place. On observe l'état du parquet, son histoire, ce qu'il peut redevenir.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">2</span>
+        <h3>Le devis</h3>
+        <p>Chiffrage détaillé selon l'ampleur du chantier et les finitions souhaitées. Clair, sans surprise.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">3</span>
+        <h3>La restauration</h3>
+        <p>Ponçage, réparation, pose si nécessaire. Un chantier propre, respectueux du lieu habité.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">4</span>
+        <h3>La révélation</h3>
+        <p>Finition choisie, parquet livré. Le moment où la lumière du jour redécouvre le bois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RÉALISATIONS ===== -->
+<section class="section chevron-bg" id="realisations" style="background:var(--plaster)">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Réalisations</p>
+      <h2 class="section-title">Quelques chantiers lyonnais.</h2>
+    </div>
+    <div class="gallery-grid">
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Projet Cour des Loges — Parquet point de Hongrie">
+        <span class="gallery-num" aria-hidden="true">01</span>
+        <span class="gallery-label">Projet Cour des Loges — Parquet point de Hongrie</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Projet Senozan — Rénovation complète">
+        <span class="gallery-num" aria-hidden="true">02</span>
+        <span class="gallery-label">Projet Senozan — Rénovation complète</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Appartement haussmannien — Chevron chêne">
+        <span class="gallery-num" aria-hidden="true">03</span>
+        <span class="gallery-label">Appartement haussmannien — Chevron chêne</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Maison de caractère — Restauration parquet ancien">
+        <span class="gallery-num" aria-hidden="true">04</span>
+        <span class="gallery-label">Maison de caractère — Restauration parquet ancien</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Bureaux historiques — Ponçage et vitrification">
+        <span class="gallery-num" aria-hidden="true">05</span>
+        <span class="gallery-label">Bureaux historiques — Ponçage et vitrification</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" class="gallery-item reveal" aria-label="Bibliothèque sur mesure — Aménagement intérieur">
+        <span class="gallery-num" aria-hidden="true">06</span>
+        <span class="gallery-label">Bibliothèque sur mesure — Aménagement intérieur</span>
+        <span class="gallery-overlay">Voir sur Instagram</span>
+      </a>
+    </div>
+    <div class="gallery-cta reveal">
+      <a href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" aria-label="Suivre nos chantiers sur Instagram @gabyce.lyon">Suivre nos chantiers sur Instagram @gabyce.lyon →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== À PROPOS ===== -->
+<section class="section" id="apropos">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p class="eyebrow" style="color:var(--stone)">Notre philosophie</p>
+        <h2 class="section-title" style="font-size:40px">La beauté comme exigence.</h2>
+        <p>Gabyce est né d'une conviction : le parquet ancien n'est pas un revêtement à remplacer, c'est un patrimoine à révéler. Chaque lame de chêne a traversé des décennies, parfois plus d'un siècle. Notre travail consiste à comprendre cette histoire avant de la sublimer.</p>
+        <p>À Lyon, dans les appartements haussmanniens et les maisons de caractère, nous intervenons avec le même soin qu'un restaurateur d'œuvre d'art — parce que c'est exactement de cela qu'il s'agit.</p>
+      </div>
+      <div class="about-quote reveal">
+        <p class="q">✨ La beauté sauvera<br>le monde.</p>
+        <p class="src">— L'esprit Gabyce</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TÉMOIGNAGES ===== -->
+<section class="section chevron-bg" id="temoignages" style="background:var(--plaster)">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Paroles de clients</p>
+      <h2 class="section-title">Ce qu'ils en disent.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-item reveal">
+        <p>« Notre parquet en point de Hongrie, datant des années 1930, a retrouvé tout son éclat. Un travail d'une précision remarquable, dans le respect total de l'existant. »</p>
+        <p class="who">Hélène D. — Lyon 6e</p>
+      </div>
+      <div class="testi-item reveal">
+        <p>« On nous avait conseillé de tout arracher et remplacer. Gabyce nous a convaincus de restaurer — résultat magnifique, et on a gardé l'âme de l'appartement. »</p>
+        <p class="who">Pierre-Antoine M. — Vieux Lyon</p>
+      </div>
+      <div class="testi-item reveal">
+        <p>« Chantier dans nos bureaux historiques, parquet restauré et vitrifié. Professionnalisme et sensibilité au patrimoine rares. »</p>
+        <p class="who">Camille R. — Presqu'île</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-head reveal" style="max-width:720px">
+      <p class="eyebrow">Contact</p>
+      <h2 class="section-title">Racontons l'histoire<br>de votre parquet.</h2>
+      <p class="contact-sub">Devis sur visite · Lyon et alentours</p>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <a class="contact-channel contact-channel-link" href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener" style="display:block" aria-label="Instagram @gabyce.lyon">
+          <span class="lbl">Instagram</span>
+          <span class="val">@gabyce.lyon</span>
+        </a>
+        <div class="contact-channel">
+          <span class="lbl">Email</span>
+          <span class="val">contact@gabyce.fr</span>
+        </div>
+        <div class="contact-channel">
+          <span class="lbl">Zone d'intervention</span>
+          <span class="val">Lyon et région lyonnaise</span>
+        </div>
+      </div>
+      <form class="contact-form reveal" action="#" method="post">
+        <div class="form-row">
+          <div class="field">
+            <label for="nom">Nom &amp; Prénom</label>
+            <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="vous@exemple.fr" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="tel">Téléphone</label>
+          <input type="tel" id="tel" name="tel" placeholder="06 00 00 00 00">
+        </div>
+        <div class="field">
+          <label for="type">Type de projet</label>
+          <select id="type" name="type">
+            <option>Rénovation de parquet ancien</option>
+            <option>Pose point de Hongrie ou chevron</option>
+            <option>Vitrification</option>
+            <option>Huilage</option>
+            <option>Aménagement intérieur</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="desc">Description du projet et de l'appartement</label>
+          <textarea id="desc" name="description" placeholder="Type de bien, surface approximative, état actuel du parquet..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid" aria-label="Envoyer ma demande">Envoyer ma demande</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">Gabyce</div>
+    <div class="footer-tag">La beauté sauvera le monde</div>
+    <nav class="footer-nav" aria-label="Navigation pied de page">
+      <a href="#savoir-faire">Savoir-faire</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#apropos">À propos</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="footer-insta" href="https://www.instagram.com/gabyce.lyon" target="_blank" rel="noopener">@gabyce.lyon</a>
+    <div class="footer-rule"></div>
+    <p class="footer-copy">© 2026 Gabyce — Tous droits réservés · Lyon</p>
+    <p class="footer-credit">Site réalisé par Payment Flow</p>
+  </div>
+</footer>
+
+<!-- ===== JS ===== -->
+<script>
+'use strict';
+
+// ----- Header scroll state -----
+function initHeaderScroll(){
+  const header = document.getElementById('header');
+  function onScroll(){
+    if(window.scrollY > 70){ header.classList.add('scrolled'); }
+    else{ header.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+}
+
+// ----- Mobile menu -----
+function initMobileMenu(){
+  const burger = document.getElementById('burger');
+  const nav = document.getElementById('mobileNav');
+  function toggle(){
+    const open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burger.addEventListener('click', toggle);
+  nav.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      nav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
+// ----- Scroll reveal -----
+function initReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.classList.add('revealed'); });
+    return;
+  }
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        const el = entry.target;
+        const siblings = Array.prototype.slice.call(el.parentNode.children).filter(function(c){return c.classList.contains('reveal');});
+        const idx = siblings.indexOf(el);
+        el.style.transitionDelay = (idx > 0 ? (idx * 0.1) : 0) + 's';
+        el.classList.add('revealed');
+        io.unobserve(el);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(el){ io.observe(el); });
+}
+
+// ----- Scrollspy -----
+function initScrollSpy(){
+  const links = document.querySelectorAll('.nav-links a');
+  const map = {};
+  links.forEach(function(l){ map[l.getAttribute('href').slice(1)] = l; });
+  const sections = Object.keys(map).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if(!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        if(map[entry.target.id]) map[entry.target.id].classList.add('active');
+      }
+    });
+  }, {threshold:0.4});
+  sections.forEach(function(s){ io.observe(s); });
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  initHeaderScroll();
+  initMobileMenu();
+  initReveal();
+  initScrollSpy();
+});
+</script>
+</body>
+</html>
