@@ -140,10 +140,20 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ===== HERO ===== */
 .hero{
   position:relative;min-height:100vh;display:flex;align-items:center;
-  padding:140px 0 90px;overflow:hidden;
+  padding:140px 0 90px;overflow:hidden;background:var(--daylight);
+}
+/* Photo de fond — salon lumineux à parquet point de Hongrie (Unsplash),
+   voilée par un dégradé --daylight pour préserver la lumière et la lisibilité */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(100deg, var(--daylight) 0%, var(--daylight) 36%, rgba(250,247,242,0.74) 56%, rgba(250,247,242,0.42) 100%),
+    linear-gradient(to bottom, rgba(250,247,242,0.55) 0%, rgba(250,247,242,0) 30%, rgba(250,247,242,0.6) 100%),
+    url("https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1900&q=80");
+  background-size:cover;background-position:center right;background-repeat:no-repeat;
 }
 .hero::after{
-  content:"";position:absolute;left:0;bottom:0;width:100%;height:45%;
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:45%;z-index:1;
   background-image:var(--chevron);background-repeat:repeat;background-size:80px 80px;
   opacity:0.04;pointer-events:none;
   -webkit-mask-image:linear-gradient(to top,#000,transparent);
@@ -279,6 +289,13 @@ a.contact-channel-link:hover .val{color:var(--gold-dust)}
   .section{padding:88px 0}
   .nav-links,.header-cta{display:none}
   .burger{display:flex}
+  /* overlay plus dense sur mobile : le texte passe au-dessus de la photo */
+  .hero::before{
+    background-image:
+      linear-gradient(180deg, rgba(250,247,242,0.93) 0%, rgba(250,247,242,0.82) 55%, rgba(250,247,242,0.9) 100%),
+      url("https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80");
+    background-position:center;
+  }
   .testi-grid{grid-template-columns:1fr;gap:40px}
   .testi-item{padding:0;border-left:none;border-top:1px solid rgba(140,131,120,0.2);padding-top:28px}
   .testi-item:first-child{border-top:none;padding-top:0}
